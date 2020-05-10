@@ -55,11 +55,18 @@ AMantleCharacter::AMantleCharacter()
 	// Activate ticking in order to update the cursor every frame.
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
+
+	health = 1;
 }
 
 void AMantleCharacter::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
+	
+	if (health <= 1) {
+		health += 0.0008;
+	}
+
 
 	if (CursorToWorld != nullptr)
 	{
@@ -88,3 +95,21 @@ void AMantleCharacter::Tick(float DeltaSeconds)
 		}
 	}
 }
+
+
+void AMantleCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	PlayerInputComponent->BindAxis("Damage", this, &AMantleCharacter::DoDamage);
+}
+
+void AMantleCharacter::DoDamage(float value)
+{
+	if(value == 10)
+		health -= .01;
+}
+
+
+
+
